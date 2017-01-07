@@ -119,7 +119,7 @@ def production_planning( input_data ):
 	return [var_names, const_names, obj_coeffs, problem]
 
 def main(argv=None):
-	read_info = read_input("./Input_ProductionPlanning.xlsx")
+	read_info = read_input("./ProductionPlanning1.xlsx")
 	output = production_planning( read_info )
 	print_output( output )
 if __name__ == "__main__":
