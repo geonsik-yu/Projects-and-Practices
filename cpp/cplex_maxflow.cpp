@@ -20,10 +20,10 @@
 - Meaningless constraints(e.g. nodes without influxes or outfluxes) not handled.
 ------------------------------------------------------------ */
 
+
 #include <ilcplex/ilocplex.h>
 #include <iostream>
 #include <string>
-#include <vector>
 
 using namespace std;
 ILOSTLBEGIN
