@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ds.js Bar-Charts in Qualtrics</title>
+</head>
+<body>
+
+
+	<!-- This part will be inserted in the question body. -->
+	<div id="wrapper" style="height:170">
+	</div>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<!-- Till here. -->
+
+
+	<script>
+
+		// This part will be inserted in the qualtrics function body.
+		var width_value = window.innerWidth
+		|| document.documentElement.clientWidth
+		|| document.body.clientWidth;
+		var variable = width_value/3 - 65
+
+		var categories= ['','Correct', 'Incorrect', 'Skip'];
+		var proportions = [80,2.4,17.6];
+		var colors = ['#0082ca','#ff5733','#0d4bcf'];
+		var grid = d3.range(15).map(function(i){
+			return {'x1':0,'y1':0,'x2':0,'y2':110};
+		});
+
+		var tickVals = grid.map(function(d,i){
+			if(i>0){ return i*10; }
+			else if(i===0){ return "100";}
+		});
+
+		var xscale = d3.scale.linear()
+					.domain([0,100])
+					.range([0,230]);
+
+		var yscale = d3.scale.linear()
+					.domain([0,categories.length])
+					.range([0,130]);
+
+		var colorScale = d3.scale.quantize()
+					.domain([0,categories.length])
+					.range(colors);
+
+		var canvas = d3.select('#wrapper')
+					.append('svg')
+					.attr({'width':variable+240,'height':170});
+			
+		var grids = canvas.append('g')
+					.attr('id','grid')
+					.attr('transform','translate('+variable+',30)')
+					.selectAll('line')
+					.data(grid)
+					.enter()
+					.append('line')
+					.attr({
+						'x1':function(d,i){ return i*23; },
+						'y1':function(d){ return d.y1; },
+						'x2':function(d,i){ return i*23; },
+						'y2':function(d){ return d.y2; },
+					})
+					.style({'stroke':'#adadad','stroke-width':'1px'});
+
+		var xAxis = d3.svg.axis();
+		xAxis.orient('bottom')
+			.scale(xscale)
+			.tickValues(tickVals);
+
+		var yAxis = d3.svg.axis();
+		yAxis.orient('left')
+			.scale(yscale)
+			.tickSize(1)
+			.tickFormat(function(d,i){ return categories[i]; })
+			.tickValues(d3.range(10));
+
+		var y_xis = canvas.append('g')
+			.attr("transform", "translate("+variable+",20)")
+			.attr('id','yaxis')
+			.call(yAxis);
+
+		var x_xis = canvas.append('g')
+			.attr("transform", "translate("+variable+",135)")
+			.attr('id','xaxis')
+			.style({'fill':'none','stroke':'#000'})
+			.call(xAxis);
+
+		var chart = canvas.append('g')
+						.attr("transform", "translate("+variable+",30)")
+						.attr('id','bars')
+						.selectAll('rect')
+						.data(proportions)
+						.enter()
+						.append('rect')
+						.attr('height',20)
+						.attr({'x':0,'y':function(d,i){ return yscale(i)+10; }})
+						.style('fill',function(d,i){ return colorScale(i); })
+						.attr('width',function(d){ return 0; });
+
+		var transit = d3.select("svg")
+						.selectAll("rect")
+						.data(proportions)
+						.transition()
+						.duration(1000) 
+						.attr("width", function(d) {return xscale(d); });
+
+		var transitext = d3.select('#bars')
+						.selectAll('text')
+						.data(proportions)
+						.enter()
+						.append('text')
+						.attr({'x':function(d) {return xscale(d)+2; },'y':function(d,i){ return yscale(i)+23; }})
+						.text(function(d){ return d+"%"; }).style({'fill':'#000','font-size':'12px'})
+
+
+		document.getElementById("xaxis").style.fontSize = '10px'
+		document.getElementById("yaxis").style.fontSize = '12px'
+
+		// Till here.
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ds.js Bar-Charts in Qualtrics</title>
+</head>
+<body>
+
+
+	<!-- This part will be inserted in the question body. -->
+	<div id="wrapper" style="padding-left:0">
+		Correct:   <text id="fade-a" style="opacity:0">88%</text> <br/>
+		Incorrect: <text id="fade-b" style="opacity:0"> 2.3%</text> <br/>
+		Skip:      <text id="fade-c" style="opacity:0">9.7%</text> <br/>
+	</div>
+	<!-- Till here. -->
+
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>	<!-- Till here. -->
+
+	<script>
+		// This part will be inserted in the qualtrics function body.
+		var width_value = window.innerWidth
+		|| document.documentElement.clientWidth
+		|| document.body.clientWidth;
+		var variable = width_value*(2/3)
+
+		document.getElementById("wrapper").style.paddingLeft = variable + "px"
+		$(document).ready(function(){ $("#fade-a").animate({ opacity: '1' }) });
+		$(document).ready(function(){ $("#fade-b").delay(200).animate({ opacity: '1' }) });
+		$(document).ready(function(){ $("#fade-c").delay(400).animate({ opacity: '1' }) });
+		// Till here.
+
+	</script>
+</body>
+</html>

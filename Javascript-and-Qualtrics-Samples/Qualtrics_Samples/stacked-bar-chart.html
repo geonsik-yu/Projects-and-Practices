@@ -1,0 +1,99 @@
+<!doctype html>
+<meta charset="utf-8">
+    <html>
+    <head>
+        <title>Horizontal Stacked Bar Chart With Groups</title>
+        <style>
+            .chart {
+                border: 1px solid #ccc;
+                display: block;
+                margin: 0 auto;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <svg class="chart" width="900" height="500"></svg>
+
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+
+        <script>
+            var svg = d3.select(".chart"),
+                margin = {top: 20, right: 20, bottom: 30, left: 100},
+                width = +svg.attr("width") - margin.left - margin.right,
+                height = +svg.attr("height") - margin.top - margin.bottom,
+                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var x = d3.scaleLinear()
+                    .rangeRound([0, width]);
+
+            var y = d3.scaleBand()
+                    .rangeRound([0, height])
+                    .paddingInner(0.05);
+
+            var z = {
+                'a': d3.scaleOrdinal()
+                    .range(["#8cb6d9", "#4787ba", "#216297"]),
+                'b': d3.scaleOrdinal()
+                    .range(["#ff5555", "#ff1122", "#990022"]),
+                'c': d3.scaleOrdinal()
+                    .range(["#d6d6d6", "#919191", "#444342"])
+            };
+
+
+            data = [{"Name":"P1", "team":"b", "A":200, "B":300, "C":200}];
+
+                var keys = ["team"]
+                data.sort(function(a, b) { return b.total - a.total; });
+
+                //setting domains
+                x.domain([0, d3.max(data, function(d){
+                        return d.total;
+                    })
+                ]).nice();
+                y.domain(data.map(function(d){
+                        return d.Name;
+                    })
+                );
+                for (key in z){
+                    z[key].domain(key);
+                }
+
+                //drawing chart
+                g.append("g")
+                    .selectAll("g")
+                        .data(d3.stack().keys(keys)(data))
+                        .enter().append("g")
+                    .selectAll("rect")
+                        .data(d => d)
+                        .enter().append("rect")
+                            .attr("fill", function(d, i) {
+                                var key = d3.select(this.parentNode).datum().key;
+                                return z[d.data.team](key);
+                            })
+                            .attr("x", function(d){
+                                return x(d[0]);
+                            })
+                            .attr("y", function(d){
+                                return y(d.data.Name);
+                            })
+                            .attr("height", function(d){
+                                return y.bandwidth();
+                            })
+                            .attr("width", function(d){
+                                return x(d[1]) - x(d[0]);
+                            });
+
+                g.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x));
+
+                  g.append("g")
+                        .attr("class", "axis")
+                        .call(d3.axisLeft(y).ticks(null, "s"));
+
+        </script>
+    </body>
+</html> 
