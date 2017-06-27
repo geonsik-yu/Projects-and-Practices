@@ -1,99 +1,62 @@
-<!doctype html>
-<meta charset="utf-8">
-    <html>
-    <head>
-        <title>Horizontal Stacked Bar Chart With Groups</title>
-        <style>
-            .chart {
-                border: 1px solid #ccc;
-                display: block;
-                margin: 0 auto;
-            }
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ds.js Bar-Charts in Qualtrics</title>
+</head>
+<body>
 
 
-        </style>
-    </head>
-    <body>
-        <svg class="chart" width="900" height="500"></svg>
+	<!-- This part will be inserted in the question body. -->
+	<div style="width:100%;height:150px">
+		<div id="w1" style="padding-left:0;">
+			<div id="stack-a" style="background:#DFA;width:0px;height:20px;float:left;text-align:center;padding-top:13px;">  </div>
+			<div id="stack-b" style="background:#FAA;width:0px;height:20px;float:left;text-align:center;padding-top:13px;">  </div>
+			<div id="stack-c" style="background:#CAA;width:0px;height:20px;float:left;text-align:center;padding-top:13px;">  </div>
+		</div>
+		<div id="w2" style="padding-left:0;">
+			<div id="text-a" style="width:0px;height:20px;float:left;text-align:center;padding-top:13px;font-size:8pt;">  </div>
+			<div id="text-b" style="width:0px;height:20px;float:left;text-align:center;padding-top:13px;font-size:8pt;">  </div>
+			<div id="text-c" style="width:0px;height:20px;float:left;text-align:center;padding-top:13px;font-size:8pt;">  </div>
+		</div>
+	</div>
+	<!-- Till here. -->
 
-        <script src="https://d3js.org/d3.v4.min.js"></script>
+	<script>
+		// This part will be inserted in the qualtrics function body.
+		var width_value = window.innerWidth
+		|| document.documentElement.clientWidth
+		|| document.body.clientWidth;
+		var variable = width_value*(1/4)
 
-        <script>
-            var svg = d3.select(".chart"),
-                margin = {top: 20, right: 20, bottom: 30, left: 100},
-                width = +svg.attr("width") - margin.left - margin.right,
-                height = +svg.attr("height") - margin.top - margin.bottom,
-                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		var width_whole = 280
+		var correct = 0.76
+		var incorrect = 0.22
+		var skip = 0.02
 
-            var x = d3.scaleLinear()
-                    .rangeRound([0, width]);
+		document.getElementById("w1").style.paddingLeft = variable + "px"
+		document.getElementById("w2").style.paddingLeft = variable + "px"
+		document.getElementById("w1").style.width = width_whole + variable + "px"
+		document.getElementById("w2").style.width = width_whole + variable + "px"
 
-            var y = d3.scaleBand()
-                    .rangeRound([0, height])
-                    .paddingInner(0.05);
+		document.getElementById("stack-a").style.transition = "all 1s";
+		document.getElementById("stack-b").style.transition = "all 1s";
+		document.getElementById("stack-c").style.transition = "all 1s";
 
-            var z = {
-                'a': d3.scaleOrdinal()
-                    .range(["#8cb6d9", "#4787ba", "#216297"]),
-                'b': d3.scaleOrdinal()
-                    .range(["#ff5555", "#ff1122", "#990022"]),
-                'c': d3.scaleOrdinal()
-                    .range(["#d6d6d6", "#919191", "#444342"])
-            };
+		document.getElementById("text-a").style.width = width_whole*correct+"px"
+		document.getElementById("text-b").style.width = width_whole*incorrect+"px"
+		document.getElementById("text-c").style.width = width_whole*skip+"px"
 
+		setTimeout(function() {  document.getElementById("stack-a").style.width = width_whole*correct+"px"; }, 0);
+		setTimeout(function() {  document.getElementById("text-a").innerHTML = "Correct "+ correct*100+"%"; }, 400);
 
-            data = [{"Name":"P1", "team":"b", "A":200, "B":300, "C":200}];
+		setTimeout(function() {  document.getElementById("stack-b").style.width = width_whole*incorrect+"px"; }, 0);
+		setTimeout(function() {  document.getElementById("text-b").innerHTML = "Incorrect "+ incorrect*100 + "%"; }, 650);
 
-                var keys = ["team"]
-                data.sort(function(a, b) { return b.total - a.total; });
+		setTimeout(function() {  document.getElementById("stack-c").style.width = width_whole*skip+"px"; }, 0);
+		setTimeout(function() {  document.getElementById("text-c").innerHTML = "Skip "+ skip*100 + "%"; }, 900);
 
-                //setting domains
-                x.domain([0, d3.max(data, function(d){
-                        return d.total;
-                    })
-                ]).nice();
-                y.domain(data.map(function(d){
-                        return d.Name;
-                    })
-                );
-                for (key in z){
-                    z[key].domain(key);
-                }
+		// Till here.
 
-                //drawing chart
-                g.append("g")
-                    .selectAll("g")
-                        .data(d3.stack().keys(keys)(data))
-                        .enter().append("g")
-                    .selectAll("rect")
-                        .data(d => d)
-                        .enter().append("rect")
-                            .attr("fill", function(d, i) {
-                                var key = d3.select(this.parentNode).datum().key;
-                                return z[d.data.team](key);
-                            })
-                            .attr("x", function(d){
-                                return x(d[0]);
-                            })
-                            .attr("y", function(d){
-                                return y(d.data.Name);
-                            })
-                            .attr("height", function(d){
-                                return y.bandwidth();
-                            })
-                            .attr("width", function(d){
-                                return x(d[1]) - x(d[0]);
-                            });
-
-                g.append("g")
-                    .attr("class", "axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x));
-
-                  g.append("g")
-                        .attr("class", "axis")
-                        .call(d3.axisLeft(y).ticks(null, "s"));
-
-        </script>
-    </body>
-</html> 
+	</script>
+</body>
+</html>
