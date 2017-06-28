@@ -37,12 +37,12 @@
 					.range([0,230]);
 
 		var yscale = d3.scale.linear()
-					.domain([0,categories.length])
+					.domain([0,Q5categories.length])
 					.range([0,130]);
 
 		var colorScale = d3.scale.quantize()
-					.domain([0,categories.length])
-					.range(colors);
+					.domain([0,Q5categories.length])
+					.range(Q5colors);
 
 		var canvas = d3.select('#Q5wrapper')
 					.append('svg')
@@ -72,7 +72,7 @@
 		yAxis.orient('left')
 			.scale(yscale)
 			.tickSize(1)
-			.tickFormat(function(d,i){ return categories[i]; })
+			.tickFormat(function(d,i){ return Q5categories[i]; })
 			.tickValues(d3.range(10));
 
 		var y_xis = canvas.append('g')
@@ -90,7 +90,7 @@
 						.attr("transform", "translate("+Q5width_variable+",30)")
 						.attr('id','bars')
 						.selectAll('rect')
-						.data(proportions)
+						.data(Q5proportions)
 						.enter()
 						.append('rect')
 						.attr('height',20)
@@ -100,14 +100,14 @@
 
 		var transit = d3.select("svg")
 						.selectAll("rect")
-						.data(proportions)
+						.data(Q5proportions)
 						.transition()
 						.duration(1000) 
 						.attr("width", function(d) {return xscale(d); });
 
 		var transitext = d3.select('#bars')
 						.selectAll('text')
-						.data(proportions)
+						.data(Q5proportions)
 						.enter()
 						.append('text')
 						.attr({'x':function(d) {return xscale(d)+2; },'y':function(d,i){ return yscale(i)+23; }})

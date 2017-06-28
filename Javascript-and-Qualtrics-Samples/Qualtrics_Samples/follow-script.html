@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ds.js Bar-Charts in Qualtrics</title>
+</head>
+<body>
+
+	<!-- This part will be inserted in the question body. -->
+	<audio controls="" id="audio_player1">
+		<source src="https://raw.githubusercontent.com/geonsik-yu/Optimization_Exercises/master/sample.mp3" type="audio/mp3">
+		Your browser does not support the audio player.
+	</audio>
+
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>	
+	<!-- Till here. -->
+
+	<script>
+		// This part will be inserted in the qualtrics function body.
+	var vid = document.getElementById("audio_player1");
+	var prev = 0
+	var curr = 0;
+
+	vid.ontimeupdate = function(){
+		curr = vid.currentTime;
+		if(curr - prev > 3){ vid.currentTime = 150; }
+		prev = curr;
+
+		var nodes = document.getElementById('audio_script1').childNodes;
+		if( curr < 5 )
+			nodes[1].style.fontWeight = "bold";
+		else if ( curr < 9 ){
+			nodes[1].style.fontWeight = "normal";
+			nodes[2].style.fontWeight = "bold";
+		}
+		else if ( curr < 13 ){
+			nodes[2].style.fontWeight = "normal";
+			nodes[3].style.fontWeight = "bold";
+		}
+	};		// Till here.
+	</script>
+</body>
+</html>
+
+
+
+Written instructions:
+Imagine that you are on a stage as a speaker.
+ 
+You are giving a presentation in front of a group of people. The group of people is attentively watching you talk, now. From behind the audience, a big television camera is videotaping you. Your image is being broadcast live online for viewers at another location.
+ 
+Gaze into the audience in front of you as well as the camera lens focusing on you, carefully. How are you presenting yourself to the audience? How does the audience see you? Pay close attention to the audience viewing you, and consider how you look in their eyes.
+ 
+What do you see as you talk to the audience?
+What would the audience think of you?
+What do you think of what you see? Check how you appear to the audience.
+Pay attention to how it feels to be in front of others.
+ 
+Now, go to the next page and answer the related questions.
