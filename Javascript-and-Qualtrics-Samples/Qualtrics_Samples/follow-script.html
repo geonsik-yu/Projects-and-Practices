@@ -12,12 +12,12 @@
 	</audio>
 
 	<div id="audio_script1"> 
-	<span>Imagine that you are on a stage as a speaker. </span>
-	<span>You are giving a presentation in front of a group of people. The group of people is attentively watching you talk, now. From behind the audience, a big television camera is videotaping you.</span>
-	<span>Your image is being broadcast live online for viewers at another location.</span>
-	<span>Gaze into the audience in front of you as well as the camera lens focusing on you, carefully. </span>
-	<span>How are you presenting yourself to the audience? How does the audience see you?</span>
-	<span>Pay close attention to the audience viewing you, and consider how you look in their eyes.</span>
+		<span id="S1">Imagine that you are on a stage as a speaker. </span>
+		<span id="S2">You are giving a presentation in front of a group of people. The group of people is attentively watching you talk, now. From behind the audience, a big television camera is videotaping you.</span>
+		<span id="S3">Your image is being broadcast live online for viewers at another location.</span>
+		<span id="S4">Gaze into the audience in front of you as well as the camera lens focusing on you, carefully. </span>
+		<span id="S5">How are you presenting yourself to the audience? How does the audience see you?</span>
+		<span id="S6">Pay close attention to the audience viewing you, and consider how you look in their eyes.</span>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -26,36 +26,44 @@
 
 	<script>
 		// This part will be inserted in the qualtrics function body.
-	var vid = document.getElementById("audio_player1");
-	var prev = 0
-	var curr = 0;
+		var vid = document.getElementById("audio_player1");
+		var prev = 0
+		var curr = 0;
 
-	vid.ontimeupdate = function(){
-		curr = vid.currentTime;
-		if(curr - prev > 3){ vid.currentTime = 150; }
-		prev = curr;
+		vid.ontimeupdate = function(){
+			curr = vid.currentTime;
+			if(curr - prev > 3){ vid.currentTime = 150; }
+			prev = curr;
 
-		var nodes = document.getElementById('audio_script1').childNodes;
-		if( curr > 2 && curr < 4 )
-			nodes[1].style.fontWeight = "bold";
-		else if (  && curr < 9 ){
-			nodes[1].style.fontWeight = "normal";
-			nodes[2].style.fontWeight = "bold";
-		}
-		else if ( curr < 13 ){
-			nodes[2].style.fontWeight = "normal";
-			nodes[3].style.fontWeight = "bold";
-		}
-	};		// Till here.
+			if( curr < 2 )
+				document.getElementById('S1').style.fontWeight = "normal";
+			else if( curr < 4 )
+				document.getElementById('S1').style.fontWeight = "bold";
+			else if( curr < 6 ){
+				document.getElementById('S1').style.fontWeight = "normal";
+				document.getElementById('S2').style.fontWeight = "bold";
+			}
+			else if( curr < 10 ){
+				document.getElementById('S2').style.fontWeight = "normal";
+				document.getElementById('S3').style.fontWeight = "bold";
+			}
+			else if( curr < 15 ){
+				document.getElementById('S3').style.fontWeight = "normal";
+				document.getElementById('S4').style.fontWeight = "bold";
+			}
+			else if( curr < 20 ){
+				document.getElementById('S4').style.fontWeight = "normal";
+				document.getElementById('S5').style.fontWeight = "bold";
+			}
+			else if( curr < 27 ){
+				document.getElementById('S5').style.fontWeight = "normal";
+				document.getElementById('S6').style.fontWeight = "bold";
+			}
+		};		
+		// Till here.
 	</script>
 </body>
 </html>
-
-You are ~ people :06-:10
- The group ~now :10~:14
- From ~ videotaping you :15-:19
- *Your image ~ location :20-25
- Gaze ~ carefully :28-:34
 
 
  
