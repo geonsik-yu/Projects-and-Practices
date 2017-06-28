@@ -5,7 +5,6 @@
 </head>
 <body>
 
-
 	<!-- This part will be inserted in the question body. -->
 	<div style="width:100%;height:150px">
 		<div id="w1" style="padding-left:0;">
@@ -35,8 +34,8 @@
 
 		document.getElementById("w1").style.paddingLeft = variable + "px"
 		document.getElementById("w2").style.paddingLeft = variable + "px"
-		document.getElementById("w1").style.width = width_whole + variable + "px"
-		document.getElementById("w2").style.width = width_whole + variable + "px"
+		document.getElementById("w1").style.width = width_whole + 30 + "px"
+		document.getElementById("w2").style.width = width_whole + 30 + "px"
 
 		document.getElementById("stack-a").style.transition = "all 1s";
 		document.getElementById("stack-b").style.transition = "all 1s";
@@ -54,9 +53,52 @@
 
 		setTimeout(function() {  document.getElementById("stack-c").style.width = width_whole*skip+"px"; }, 0);
 		setTimeout(function() {  document.getElementById("text-c").innerHTML = "Skip "+ skip*100 + "%"; }, 900);
-
 		// Till here.
 
+
+
+
+
+			var width_value = window.innerWidth
+		|| document.documentElement.clientWidth
+		|| document.body.clientWidth;
+		var Q3variable = width_value*(3/35)
+
+		var Q3width_whole = 400
+		var Q3correct = 0.52
+		var Q3incorrect = 0.31
+		var Q3skip = 0.17
+
+		document.getElementById("Q3w1").style.paddingLeft = Q3variable + "px"
+		document.getElementById("Q3w2").style.paddingLeft = Q3variable + "px"
+		document.getElementById("Q3w1").style.width = width_whole + Q3variable + "px"
+		document.getElementById("Q3w2").style.width = width_whole + Q3variable + "px"
+
+		document.getElementById("Q3stack-a").style.transition = "all 1s";
+		document.getElementById("Q3stack-b").style.transition = "all 1s";
+		document.getElementById("Q3stack-c").style.transition = "all 1s";
+
+		document.getElementById("Q3text-a").style.width = width_whole*Q3correct+"px"
+		document.getElementById("Q3text-b").style.width = width_whole*Q3incorrect+"px"
+		document.getElementById("Q3text-c").style.width = width_whole*Q3skip+"px"
+
+		setTimeout(function() {  document.getElementById("Q3stack-a").style.width = width_whole*Q3correct+"px"; }, 0);
+		setTimeout(function() {  document.getElementById("Q3text-a").innerHTML = "Correct "+Q3correct*100+"%"; }, 400);
+
+		setTimeout(function() {  document.getElementById("Q3stack-b").style.width = width_whole*Q3incorrect+"px"; }, 0);
+		setTimeout(function() {  document.getElementById("Q3text-b").innerHTML = "Incorrect "+Q3incorrect*100 + "%"; }, 650);
+
+		setTimeout(function() {  document.getElementById("Q3stack-c").style.width = width_whole*Q3skip+"px"; }, 0);
+		setTimeout(function() {  document.getElementById("Q3text-c").innerHTML = "Skip "+ Q3skip*100 + "%"; }, 900);
+
 	</script>
+
+
+
 </body>
 </html>
+
+
+
+
+

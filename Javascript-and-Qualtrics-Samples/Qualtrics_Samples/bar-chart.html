@@ -7,24 +7,23 @@
 
 
 	<!-- This part will be inserted in the question body. -->
-	<div id="wrapper" style="height:170">
+	<div id="Q5wrapper" style="height:170">
 	</div>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<!-- Till here. -->
 
 
 	<script>
-
 		// This part will be inserted in the qualtrics function body.
-		var width_value = window.innerWidth
+		var Q5width_value = window.innerWidth
 		|| document.documentElement.clientWidth
 		|| document.body.clientWidth;
-		var variable = width_value/3 - 65
+		var Q5width_variable = Q5width_value/3 - 65
 
-		var categories= ['','Correct', 'Incorrect', 'Skip'];
-		var proportions = [80,2.4,17.6];
-		var colors = ['#0082ca','#ff5733','#0d4bcf'];
-		var grid = d3.range(15).map(function(i){
+		var Q5categories= ['','Correct', 'Incorrect', 'Skip'];
+		var Q5proportions = [80,2.4,17.6];
+		var Q5colors = ['#0082ca','#ff5733','#0d4bcf'];
+		var Q5grid = d3.range(15).map(function(i){
 			return {'x1':0,'y1':0,'x2':0,'y2':110};
 		});
 
@@ -45,13 +44,13 @@
 					.domain([0,categories.length])
 					.range(colors);
 
-		var canvas = d3.select('#wrapper')
+		var canvas = d3.select('#Q5wrapper')
 					.append('svg')
-					.attr({'width':variable+240,'height':170});
+					.attr({'width':Q5width_variable+240,'height':170});
 			
 		var grids = canvas.append('g')
 					.attr('id','grid')
-					.attr('transform','translate('+variable+',30)')
+					.attr('transform','translate('+Q5width_variable+',30)')
 					.selectAll('line')
 					.data(grid)
 					.enter()
@@ -77,18 +76,18 @@
 			.tickValues(d3.range(10));
 
 		var y_xis = canvas.append('g')
-			.attr("transform", "translate("+variable+",20)")
+			.attr("transform", "translate("+Q5width_variable+",20)")
 			.attr('id','yaxis')
 			.call(yAxis);
 
 		var x_xis = canvas.append('g')
-			.attr("transform", "translate("+variable+",135)")
+			.attr("transform", "translate("+Q5width_variable+",135)")
 			.attr('id','xaxis')
 			.style({'fill':'none','stroke':'#000'})
 			.call(xAxis);
 
 		var chart = canvas.append('g')
-						.attr("transform", "translate("+variable+",30)")
+						.attr("transform", "translate("+Q5width_variable+",30)")
 						.attr('id','bars')
 						.selectAll('rect')
 						.data(proportions)
@@ -117,9 +116,7 @@
 
 		document.getElementById("xaxis").style.fontSize = '10px'
 		document.getElementById("yaxis").style.fontSize = '12px'
-
 		// Till here.
-
 	</script>
 </body>
 </html>
