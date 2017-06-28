@@ -7,9 +7,18 @@
 
 	<!-- This part will be inserted in the question body. -->
 	<audio controls="" id="audio_player1">
-		<source src="https://raw.githubusercontent.com/geonsik-yu/Projects-and-Practices/Javascript-and-Qualtrics-Samples/Resources/script plus crowd and applause_public ver.2 (online-audio-converter.com).wav" type="audio/mp3">
+		<source src="https://raw.githubusercontent.com/geonsik-yu/Projects-and-Practices/master/Javascript-and-Qualtrics-Samples/Resources/script%20only_public.mp3" type="audio/mp3">
 		Your browser does not support the audio player.
 	</audio>
+
+	<div id="audio_script1"> 
+	<span>Imagine that you are on a stage as a speaker. </span>
+	<span>You are giving a presentation in front of a group of people. The group of people is attentively watching you talk, now. From behind the audience, a big television camera is videotaping you.</span>
+	<span>Your image is being broadcast live online for viewers at another location.</span>
+	<span>Gaze into the audience in front of you as well as the camera lens focusing on you, carefully. </span>
+	<span>How are you presenting yourself to the audience? How does the audience see you?</span>
+	<span>Pay close attention to the audience viewing you, and consider how you look in their eyes.</span>
+	</div>
 
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>	
@@ -27,9 +36,9 @@
 		prev = curr;
 
 		var nodes = document.getElementById('audio_script1').childNodes;
-		if( curr < 5 )
+		if( curr > 2 && curr < 4 )
 			nodes[1].style.fontWeight = "bold";
-		else if ( curr < 9 ){
+		else if (  && curr < 9 ){
 			nodes[1].style.fontWeight = "normal";
 			nodes[2].style.fontWeight = "bold";
 		}
@@ -42,18 +51,13 @@
 </body>
 </html>
 
+You are ~ people :06-:10
+ The group ~now :10~:14
+ From ~ videotaping you :15-:19
+ *Your image ~ location :20-25
+ Gaze ~ carefully :28-:34
 
 
-Written instructions:
-Imagine that you are on a stage as a speaker.
  
-You are giving a presentation in front of a group of people. The group of people is attentively watching you talk, now. From behind the audience, a big television camera is videotaping you. Your image is being broadcast live online for viewers at another location.
  
-Gaze into the audience in front of you as well as the camera lens focusing on you, carefully. How are you presenting yourself to the audience? How does the audience see you? Pay close attention to the audience viewing you, and consider how you look in their eyes.
- 
-What do you see as you talk to the audience?
-What would the audience think of you?
-What do you think of what you see? Check how you appear to the audience.
-Pay attention to how it feels to be in front of others.
- 
-Now, go to the next page and answer the related questions.
+  
