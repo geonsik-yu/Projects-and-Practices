@@ -1,7 +1,15 @@
+/*
+ Title: OpenCL Vector Addition Example
+ References:
+	[1] Munshi, Aaftab, et al. OpenCL programming guide. Pearson Education, 2011.
+	[2] B. Gaster, "Bgaster/opencl-book-samples". Github repository. N.p., 2011. Web. 30 June 2017
+ Note:
+	- Develop with OpenCL in OS X.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
-//Develop with OpenCL in OS X.
 #include <OpenCL/opencl.h>
 #include "ex2_vector_addition.cl.h"
 
@@ -31,23 +39,20 @@ int main (int argc, const char * argv[]) {
 	// : Dispatch Queue
 	dispatch_queue_t queue = gcl_create_dispatch_queue(CL_DEVICE_TYPE_GPU, NULL);
  
+ 
+	// Step 2 ------------------------------------------------------------------------
+	// : Memory Allocation.
 	float* test_in_a = (float*)malloc(sizeof(cl_float) * NUM_VALUES);
 	float* test_in_b = (float*)malloc(sizeof(cl_float) * NUM_VALUES);
 	for (int i = 0; i < NUM_VALUES; i++) {
 		test_in_a[i] = (cl_float)(rand()%100);
 		test_in_b[i] = (cl_float)(rand()%100);
 	}
- 
-	// Step 2 ------------------------------------------------------------------------
-	// : Result Memory Allocation.
 	float* test_out = (float*)malloc(sizeof(cl_float) * NUM_VALUES);
- 
-	void* mem_in_a  = gcl_malloc(sizeof(cl_float) * NUM_VALUES, test_in_a,
-							   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-	void* mem_in_b  = gcl_malloc(sizeof(cl_float) * NUM_VALUES, test_in_b,
-							   CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
- 
-	void* mem_out = gcl_malloc(sizeof(cl_float) * NUM_VALUES, NULL, CL_MEM_WRITE_ONLY);
+	
+	void* mem_in_a  = gcl_malloc(sizeof(cl_float) * NUM_VALUES, test_in_a, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+	void* mem_in_b  = gcl_malloc(sizeof(cl_float) * NUM_VALUES, test_in_b, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+ 	void* mem_out = gcl_malloc(sizeof(cl_float) * NUM_VALUES, NULL, CL_MEM_WRITE_ONLY);
  
 	
 	// Step 3 ------------------------------------------------------------------------
@@ -75,7 +80,7 @@ int main (int argc, const char * argv[]) {
  
 	
 	// Step 4 ------------------------------------------------------------------------
-	// : Validation and Memory Management.
+	// : Validation and Memory Release.
 	if ( validate(test_in_a, test_in_b, test_out)) {
 		fprintf(stdout, "All values were properly added.\n");
 	}
