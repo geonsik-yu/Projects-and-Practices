@@ -17,7 +17,7 @@
 
 #include <OpenCL/cl.h>
 
-// A hard-coded numbers
+// Hard-coded numbers
 #define DIM_N 4
 #define DIM_P 2
 #define DIM_M 8
@@ -105,7 +105,7 @@ int main(int argc, char** argv){
 	size_t localWorkSize[2] = { 1, 1 };
 	errNum = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
 	clFinish(commandQueue);
-	errNum = clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, DIM_N * DIM_M * sizeof(float), result, 0, NULL, NULL);
+	errNum = clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, DIM_N*DIM_M*sizeof(float), result, 0, NULL, NULL);
 	
 	if (errNum != CL_SUCCESS){
 		std::cerr << "Error queuing kernel for execution and/or reading result buffer." << std::endl;

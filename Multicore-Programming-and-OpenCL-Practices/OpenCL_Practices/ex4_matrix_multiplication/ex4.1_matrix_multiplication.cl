@@ -10,5 +10,4 @@ kernel void my_matrix_multiplication( const int dimN, const int dimP, const int 
 		tmp += input_a[r_id * dimP + k] * input_b[k * dimM + c_id];
 	//printf("%d, %d, %f, %f, %f\n",r_id, c_id, input_a[r_id * dimP + k], input_b[k * dimM + c_id], tmp);
 	output[r_id * dimM + c_id] = tmp;
-	//output[r_id * dimM + c_id] = tmp;
 }
