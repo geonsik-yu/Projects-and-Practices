@@ -3,10 +3,10 @@ This repository includes introductory study materials of OpenCL and multicore pr
 
 
 ### References
-[1] Munshi, Aaftab, et al. *OpenCL programming guide*. Pearson Education, 2011.
-[2] B. Gaster, "Bgaster/opencl-book-samples". *Github repository*. N.p., 2011. Web. 30 June 2017
-[3] Bernd Burgstaller. "Programming Accelerator with OpenCL." *Multicore Programming*. Yonsei University. Engineering Bld. 2016. Lecture.
-[4] W. Hwu Wen-Mei. "Basic Matrix-Matrix Multiplication." *Heterogeneous Parallel Programming*, Coursera. 2016. Lecture.
+[1] Munshi, Aaftab, et al. *OpenCL programming guide*. Pearson Education, 2011.<br/> 
+[2] B. Gaster, "Bgaster/opencl-book-samples". *Github repository*. N.p., 2011. Web. 30 June 2017.<br/>
+[3] Bernd Burgstaller. "Programming Accelerator with OpenCL." *Multicore Programming*. Yonsei University. Engineering Bld. 2016. Lecture.<br/>
+[4] W. Hwu Wen-Mei. "Basic Matrix-Matrix Multiplication." *Heterogeneous Parallel Programming*, Coursera. 2016. Lecture.<br/>
 
 ### List of Code Examples
 | ex0  | OpenCL platform and device info. |
