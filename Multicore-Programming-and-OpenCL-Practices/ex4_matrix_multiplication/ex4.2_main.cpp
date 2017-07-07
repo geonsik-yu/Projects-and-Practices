@@ -73,9 +73,10 @@ int main(int argc, char** argv){
 	
 	// 5. Kernel Memory Objects and Kernel Arguments -----------------------
 	// 2D matrices flattended into 1D array.
-	float* a = new float[DIM_N*DIM_P];//[DIM_N][DIM_P];
-	float* b = new float[DIM_P*DIM_M];//[DIM_P][DIM_M];
-	float* result = new float[DIM_N*DIM_M];//[DIM_N][DIM_M];
+	int n = DIM_N; int p = DIM_P; int m = DIM_M;
+	float* a = new float[n*p];//[DIM_N][DIM_P];
+	float* b = new float[p*m];//[DIM_P][DIM_M];
+	float* result = new float[n*m];//[DIM_N][DIM_M];
 	
 	// matrix a (NxP)
 	for(int i = 0; i < DIM_N*DIM_P; i++)
@@ -89,7 +90,6 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	
-	int n = DIM_N; int p = DIM_P; int m = DIM_M;
 	errNum = clSetKernelArg(kernel, 0, sizeof(int), &n);
 	errNum |= clSetKernelArg(kernel, 1, sizeof(int), &p);
 	errNum |= clSetKernelArg(kernel, 2, sizeof(int), &m);
@@ -103,11 +103,11 @@ int main(int argc, char** argv){
 	}
 	
 	// 6. Queue Kernel and Read the output back to the Host ----------------
-	size_t globalWorkSize[1] = { DIM_N };
-	size_t localWorkSize[1] = { 1024 / 32 };
+	size_t globalWorkSize[1] = {(size_t) DIM_N};
+	size_t localWorkSize[1] = {(size_t) 1024 / 32};
 	// Iris Pro has max CU number of 40, but we use 32 instead to divide the whole workload evenly.
 	// - This will be modified in the following example with padding.
-	errNum = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, &prof_event);
+	errNum = clEnqueueNDRangeKernel(commandQueue, kernel, 1, NULL, globalWorkSize, localWorkSize, 0, NULL, &prof_event);
 	errNum = clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, DIM_N*DIM_M*sizeof(float), result, 0, NULL, &prof_event);
 	if (errNum != CL_SUCCESS){
 		std::cerr << "Error queuing kernel for execution and/or reading result buffer." << std::endl;
@@ -276,6 +276,8 @@ void TimeStamp(cl_event prof_event){
 	std::cout << "elapsed time (queue)     : " << elapsed_queue << std::endl;
 	std::cout << "elapsed time (submitted) : " << elapsed_submitted << std::endl;
 	std::cout << "elapsed time (execution) : " << elapsed_execution << std::endl;
+	std::cout << "elapsed time (total) : " << elapsed_queue + elapsed_submitted + elapsed_execution << std::endl;
+
 }
 
 

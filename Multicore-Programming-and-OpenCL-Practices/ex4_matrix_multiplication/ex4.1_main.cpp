@@ -7,8 +7,8 @@
 	[4] W. Hwu Wen-Mei. "Basic Matrix-Matrix Multiplication." Heterogeneous Parallel Programming, Coursera. 2016. Lecture.
  Note:
 	- Develop with OpenCL in OS X. Lecture.
- 	- The Number of work items is equal to the number of elements (N x M) in output matrix.
-    - Naive implementation, using flattened matrices.
+	- The Number of work items is equal to the number of elements (N x M) in output matrix.
+	- Naive implementation, using flattened matrices.
 */
 
 #include <iostream>
@@ -18,17 +18,18 @@
 #include <OpenCL/cl.h>
 
 // Hard-coded numbers
-#define DIM_N 4
-#define DIM_P 2
-#define DIM_M 8
+#define DIM_N 1024
+#define DIM_P 2048
+#define DIM_M 1024
 
 // Set-up Function Declarations.
 cl_context CreateContext();
 cl_command_queue CreateCommandQueue(cl_context context, cl_device_id *device);
 cl_program CreateProgram(cl_context context, cl_device_id device, const char* fileName);
 bool CreateMemObjects(cl_context context, cl_mem memObjects[3], float *a, float *b);
+void TimeStamp(cl_event prof_event);
 void Cleanup(cl_context context, cl_command_queue commandQueue, cl_program program, cl_kernel kernel, cl_mem memObjs[3]);
-int printMatrix(int Mdim, int Ndim, int Pdim, float* a, float* b, float* result);
+int PrintMatrix(int Mdim, int Ndim, int Pdim, float* a, float* b, float* result);
 
 int main(int argc, char** argv){
 	
@@ -39,6 +40,7 @@ int main(int argc, char** argv){
 	cl_kernel kernel = 0;
 	cl_mem memObjects[3] = { 0, 0, 0 };
 	cl_int errNum;
+	cl_event prof_event; // Event that handles profile kernel execution times.
 	
 	// 1. Context ----------------------------------------------------------
 	context = CreateContext();
@@ -103,19 +105,18 @@ int main(int argc, char** argv){
 	// 6. Queue Kernel and Read the output back to the Host ----------------
 	size_t globalWorkSize[2] = { DIM_N, DIM_M };
 	size_t localWorkSize[2] = { 1, 1 };
-	errNum = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
-	clFinish(commandQueue);
-	errNum = clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, DIM_N*DIM_M*sizeof(float), result, 0, NULL, NULL);
-	
+	errNum = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, &prof_event);
+	errNum = clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, DIM_N*DIM_M*sizeof(float), result, 0, NULL, &prof_event);
 	if (errNum != CL_SUCCESS){
 		std::cerr << "Error queuing kernel for execution and/or reading result buffer." << std::endl;
 		Cleanup(context, commandQueue, program, kernel, memObjects);
 		return 1;
 	}
 	
-	// 7. Output the result buffer
-	//printMatrix( DIM_N, DIM_P, DIM_M, a, b, result);
-	//std::cout << std::endl;
+	// 7. Output the result buffer and measure performance.
+	//PrintMatrix( DIM_N, DIM_P, DIM_M, a, b, result);
+	TimeStamp(prof_event);
+	
 	std::cout << "Executed program succesfully." << std::endl;
 	delete[] a;
 	delete[] b;
@@ -187,7 +188,7 @@ cl_command_queue CreateCommandQueue(cl_context context, cl_device_id *device){
 	}
 	// 2-3. Choose an availble device (first available device in this example).
 	// (*) Normally, you would query for all available devices and select the most appropriate one.
-	commandQueue = clCreateCommandQueue(context, devices[0], 0, NULL);
+	commandQueue = clCreateCommandQueue(context, devices[0], CL_QUEUE_PROFILING_ENABLE, NULL);
 	if (commandQueue == NULL){
 		delete [] devices;
 		std::cerr << "Failed to create commandQueue for device 0";
@@ -252,7 +253,33 @@ bool CreateMemObjects(cl_context context, cl_mem memObjects[3], float *a, float 
 	return true;
 }
 
-// Function 5. Cleanup any created OpenCL resources.
+// Function 5. Measure performance.
+// print out timestamp on a nanosecond granularity.
+void TimeStamp(cl_event prof_event){
+	cl_ulong queue_time;
+	cl_ulong submission_time;
+	cl_ulong exe_start_time;
+	cl_ulong exe_end_time;
+	cl_int errNum;
+	
+	errNum = clGetEventProfilingInfo(prof_event, CL_PROFILING_COMMAND_QUEUED, sizeof(cl_ulong), &queue_time, NULL);
+	errNum = clGetEventProfilingInfo(prof_event, CL_PROFILING_COMMAND_SUBMIT, sizeof(cl_ulong), &submission_time, NULL);
+	errNum = clGetEventProfilingInfo(prof_event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &exe_start_time, NULL);
+	errNum = clGetEventProfilingInfo(prof_event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &exe_end_time, NULL);
+
+	unsigned long elapsed_queue = (unsigned long) (submission_time - queue_time);
+	unsigned long elapsed_submitted = (unsigned long) (exe_start_time - submission_time);
+	unsigned long elapsed_execution = (unsigned long) (exe_end_time - exe_start_time);
+	
+	std::cout << "elapsed time (queue)     : " << elapsed_queue << std::endl;
+	std::cout << "elapsed time (submitted) : " << elapsed_submitted << std::endl;
+	std::cout << "elapsed time (execution) : " << elapsed_execution << std::endl;
+	std::cout << "elapsed time (total) : " << elapsed_queue + elapsed_submitted + elapsed_execution << std::endl;
+	
+}
+
+
+// Function 6. Cleanup any created OpenCL resources.
 void Cleanup(cl_context context, cl_command_queue commandQueue, cl_program program, cl_kernel kernel, cl_mem memObjects[3]){
 	for (int i = 0; i < 3; i++)
 		if (memObjects[i] != 0) clReleaseMemObject(memObjects[i]);
@@ -263,8 +290,8 @@ void Cleanup(cl_context context, cl_command_queue commandQueue, cl_program progr
 }
 
 
-// Function 6. Print matrices.
-int printMatrix(int N, int P, int M, float* a, float* b, float* result){
+// Function 7. Print matrices.
+int PrintMatrix(int N, int P, int M, float* a, float* b, float* result){
 	// matrix a[Ndim][Pdim]
 	for(int i = 0; i < N; i++){
 		for(int j = 0; j < P; j++)
