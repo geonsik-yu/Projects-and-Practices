@@ -10,11 +10,18 @@ This repository includes introductory study materials of OpenCL and multicore pr
 [6] Cheney, E., and David Kincaid. Numerical mathematics and computing. Nelson Education, 2012.<br/>
 
 ### List of Code Examples
-| ex0  | OpenCL platform and device info. |
-| ex1  | Hello World in OpenCL (Element-wise Square) |
-| ex2  | Content Cell  |
-| ex3  | Content Cell  |
-| ex4  | Content Cell  |
+| Index | Descriptions                                        |
+| ----- | --------------------------------------------------- |
+| ex0   | OpenCL platform and device info.                    |
+| ex1   | Hello World in OpenCL (Element-wise Square).        |
+| ex2   | OpenCL vector addition.                             |
+| ex3   | OpenCL vector addition.                             |
+| ex4.0 | Sequential matrix multiplication.                   |
+| ex4.1 | OpenCL matrix multiplication: Naive                 |
+| ex4.2 | OpenCL matrix multiplication: Private memory (Row)  |
+| ex4.3 | OpenCL matrix multiplication: Row padding           |
+| ex4.4 | OpenCL matrix multiplication: Local memory (Column) |
+| ex4.5 | OpenCL matrix multiplication: Tiling technique      |
 
 ### Offline Session Contributors
 Geonsik Yu and Noori Kim.
