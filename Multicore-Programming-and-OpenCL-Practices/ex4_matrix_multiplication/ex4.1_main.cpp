@@ -6,30 +6,34 @@
 	[3] Bernd Burgstaller. "Programming Accelerator with OpenCL." Multicore Programming. Yonsei University. Engineering Bld. 2016. Lecture.
 	[4] W. Hwu Wen-Mei. "Basic Matrix-Matrix Multiplication." Heterogeneous Parallel Programming, Coursera. 2016. Lecture.
  Note:
-	- Develop with OpenCL in OS X. Lecture.
+	- Develop with OpenCL in OS X, Xcode.
 	- The Number of work items is equal to the number of elements (N x M) in output matrix.
 	- Naive implementation, using flattened matrices.
+	- Since floating number precision error is not properly handled in this introductory example, our tolerance value is quite large.
 */
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
-
+#include <cstdlib>
+#include <string>
+#include <cmath>
 #include <OpenCL/cl.h>
 
-// Hard-coded numbers
-#define DIM_N 1024
-#define DIM_P 2048
-#define DIM_M 1024
+// A hard-coded error bound.
+static float ERROR_BOUND = 0.5;
 
 // Set-up Function Declarations.
 cl_context CreateContext();
 cl_command_queue CreateCommandQueue(cl_context context, cl_device_id *device);
 cl_program CreateProgram(cl_context context, cl_device_id device, const char* fileName);
-bool CreateMemObjects(cl_context context, cl_mem memObjects[3], float *a, float *b);
+bool CreateMemObjects(cl_context context, cl_mem memObjects[3], float *a, float *b, size_t n, size_t p, size_t m);
+void Validation(float* correct_result, float* result, size_t n, size_t m);
 void TimeStamp(cl_event prof_event);
 void Cleanup(cl_context context, cl_command_queue commandQueue, cl_program program, cl_kernel kernel, cl_mem memObjs[3]);
-int PrintMatrix(int Mdim, int Ndim, int Pdim, float* a, float* b, float* result);
+void PrintMatrix(size_t Nrow, size_t Ncol, float* matrix);
+float pround(float f);
 
 int main(int argc, char** argv){
 	
@@ -73,23 +77,53 @@ int main(int argc, char** argv){
 	
 	// 5. Kernel Memory Objects and Kernel Arguments -----------------------
 	// 2D matrices flattended into 1D array.
-	float* a = new float[DIM_N*DIM_P];//[DIM_N][DIM_P];
-	float* b = new float[DIM_P*DIM_M];//[DIM_P][DIM_M];
-	float* result = new float[DIM_N*DIM_M];//[DIM_N][DIM_M];
+	size_t n; size_t p; size_t m;
+
+	std::ifstream fin;
+	fin.open("./problem_2.txt");
+	// Input file "problem_1.txt" contains a matrix multiplication problem with ( n = 4, p = 8, m = 2 )
+	// 	and "problem_2.txt" contains a problem with ( n = 1024, p = 2048, m = 512 )
+	if (!fin.is_open()){
+		std::cout << "input file open failure" << std::endl;
+		exit(1);
+	}
+	
+	std::string read_str;
+	std::string buf;
+	getline(fin, read_str);
+	std::stringstream ss(read_str);
+	ss >> buf; n = atoi(buf.c_str());
+	ss >> buf; p = atoi(buf.c_str());
+	ss >> buf; m = atoi(buf.c_str());
+	
+	float* a = new float[n*p];//[DIM_N][DIM_P];
+	float* b = new float[p*m];//[DIM_P][DIM_M];
+	float* result = new float[n*m];//[DIM_N][DIM_M];
 
 	// matrix a (NxP)
-	for(int i = 0; i < DIM_N*DIM_P; i++)
-		a[i] = rand()%10;
+	for(int i = 0; i < n; i++){
+		getline(fin, read_str);
+		std::stringstream ss(read_str);
+		for(int j = 0; j < p; j++){
+			ss >> buf; a[i*p+j] = (atof(buf.c_str()));
+		}
+	}
 	// matrix b (PxM)
-	for(int i = 0; i < DIM_P*DIM_M; i++)
-		b[i] = rand()%10;
-	
-	if (!CreateMemObjects(context, memObjects, a, b)){
+	for(int i = 0; i < p; i++){
+		getline(fin, read_str);
+		std::stringstream ss(read_str);
+		for(int j = 0; j < m; j++){
+			ss >> buf; b[i*m+j] = (atof(buf.c_str()));
+		}
+	}
+	//PrintMatrix(n, p, a);
+	//PrintMatrix(p, m, b);
+
+	if (!CreateMemObjects(context, memObjects, a, b, n, p, m)){
 		Cleanup(context, commandQueue, program, kernel, memObjects);
 		return 1;
 	}
-
-	int n = DIM_N; int p = DIM_P; int m = DIM_M;
+	
 	errNum = clSetKernelArg(kernel, 0, sizeof(int), &n);
 	errNum |= clSetKernelArg(kernel, 1, sizeof(int), &p);
 	errNum |= clSetKernelArg(kernel, 2, sizeof(int), &m);
@@ -103,20 +137,29 @@ int main(int argc, char** argv){
 	}
 	
 	// 6. Queue Kernel and Read the output back to the Host ----------------
-	size_t globalWorkSize[2] = { DIM_N, DIM_M };
+	size_t globalWorkSize[2] = { n, m };
 	size_t localWorkSize[2] = { 1, 1 };
 	errNum = clEnqueueNDRangeKernel(commandQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, &prof_event);
-	errNum = clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, DIM_N*DIM_M*sizeof(float), result, 0, NULL, &prof_event);
+	errNum = clEnqueueReadBuffer(commandQueue, memObjects[2], CL_TRUE, 0, n*m*sizeof(float), result, 0, NULL, &prof_event);
 	if (errNum != CL_SUCCESS){
 		std::cerr << "Error queuing kernel for execution and/or reading result buffer." << std::endl;
 		Cleanup(context, commandQueue, program, kernel, memObjects);
 		return 1;
 	}
 	
-	// 7. Output the result buffer and measure performance.
-	//PrintMatrix( DIM_N, DIM_P, DIM_M, a, b, result);
-	TimeStamp(prof_event);
+	// 7. Output the result buffer, result validation and measure performance.
+	//PrintMatrix(DIM_N, DIM_M, result);
+	float* correct_result = new float[n*m];
+	for(int i = 0; i < n; i++){
+		getline(fin, read_str);
+		std::stringstream ss(read_str);
+		for(int j = 0; j < m; j++){
+			ss >> buf; correct_result[i*m+j] = atof(buf.c_str());
+		}
+	}
 	
+	Validation(correct_result, result, n, m);
+	TimeStamp(prof_event);
 	std::cout << "Executed program succesfully." << std::endl;
 	delete[] a;
 	delete[] b;
@@ -241,10 +284,10 @@ cl_program CreateProgram(cl_context context, cl_device_id device, const char* fi
 }
 
 // Function 4. OpenCL Kernel Memory Objects.
-bool CreateMemObjects(cl_context context, cl_mem memObjects[3], float *a, float *b){
-	memObjects[0] = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(float)*DIM_N*DIM_P, a, NULL);
-	memObjects[1] = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(float)*DIM_P*DIM_M, b, NULL);
-	memObjects[2] = clCreateBuffer(context, CL_MEM_READ_WRITE, sizeof(float)*DIM_N*DIM_M, NULL, NULL);
+bool CreateMemObjects(cl_context context, cl_mem memObjects[3], float *a, float *b, size_t n, size_t p, size_t m){
+	memObjects[0] = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(float)*n*p, a, NULL);
+	memObjects[1] = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, sizeof(float)*p*m, b, NULL);
+	memObjects[2] = clCreateBuffer(context, CL_MEM_READ_WRITE, sizeof(float)*n*m, NULL, NULL);
 	
 	if (memObjects[0] == NULL || memObjects[1] == NULL || memObjects[2] == NULL){
 		std::cerr << "Error creating memory objects." << std::endl;
@@ -253,7 +296,28 @@ bool CreateMemObjects(cl_context context, cl_mem memObjects[3], float *a, float 
 	return true;
 }
 
-// Function 5. Measure performance.
+// Function 5. Result correctness validation.
+void Validation(float* correct_result, float* result, size_t n, size_t m){
+	// Floating point number precision error not properly managed.
+	bool flag = true;
+	for(size_t i = 0; i < n*m; i++){
+		if( fabs( result[i] - correct_result[i] ) > ERROR_BOUND ){
+			flag = false;// break;
+			std::cout << std::setprecision(10) << fabs( result[i] - correct_result[i] ) << std::endl;
+		}
+	}
+	if(flag==true){
+		std::cout << "Computation result is proper." << std::endl;
+		std::cout << "------------------------------------------" << std::endl;
+	}
+	else{
+		std::cout << "Computation result is not proper." << std::endl;
+		std::cout << "------------------------------------------" << std::endl;
+	}
+}
+
+
+// Function 6. Measure performance.
 // print out timestamp on a nanosecond granularity.
 void TimeStamp(cl_event prof_event){
 	cl_ulong queue_time;
@@ -275,11 +339,11 @@ void TimeStamp(cl_event prof_event){
 	std::cout << "elapsed time (submitted) : " << elapsed_submitted << std::endl;
 	std::cout << "elapsed time (execution) : " << elapsed_execution << std::endl;
 	std::cout << "elapsed time (total) : " << elapsed_queue + elapsed_submitted + elapsed_execution << std::endl;
-	
+	std::cout << "------------------------------------------" << std::endl;
 }
 
 
-// Function 6. Cleanup any created OpenCL resources.
+// Function 7. Cleanup any created OpenCL resources.
 void Cleanup(cl_context context, cl_command_queue commandQueue, cl_program program, cl_kernel kernel, cl_mem memObjects[3]){
 	for (int i = 0; i < 3; i++)
 		if (memObjects[i] != 0) clReleaseMemObject(memObjects[i]);
@@ -290,31 +354,13 @@ void Cleanup(cl_context context, cl_command_queue commandQueue, cl_program progr
 }
 
 
-// Function 7. Print matrices.
-int PrintMatrix(int N, int P, int M, float* a, float* b, float* result){
+// Function 8. Print a flattened matrix
+void PrintMatrix(size_t Nrow, size_t Ncol, float* matrix){
 	// matrix a[Ndim][Pdim]
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < P; j++)
-			std::cout << a[(N*i)+j]  << " ";
+	for(size_t i = 0; i < Nrow; i++){
+		for(size_t j = 0; j < Ncol; j++)
+			std::cout << std::setprecision(10) <<matrix[(Ncol*i)+j]  << " ";
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
-	
-	// matrix b[Pdim][Mdim]
-	for(int i = 0; i < P; i++){
-		for(int j = 0; j < M; j++)
-			std::cout << b[(P*i)+j]  << " ";
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-	
-	// matrix result[Ndim][Mdim]
-	for(int i = 0; i < N; i++){
-		for(int j = 0; j < M; j++)
-			std::cout << result[(N*i)+j]  << " ";
-		std::cout << std::endl;
-	}
-	return 0;
 };
-
-
