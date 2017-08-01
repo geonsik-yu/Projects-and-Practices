@@ -1,0 +1,9 @@
+Note:
+- This source code illustrates implementation of simple and well-known image masks(kernels) using OpenCV which can be found in wikipedia: https://en.wikipedia.org/wiki/Kernel_(image_processing). 
+- Names of masks implemented and their matrices are as follows:
+[1] Sharpen      [2] Edge detection      [3] Gaussian Blur
+   0 -1  0             -1  -1  -1             1/16 2/16 1/16
+  -1  5 -1             -1   8  -1             2/16 4/16 2/16
+   0 -1  0             -1  -1  -1             1/16 2/16 1/16
+- Developed with OS X and Xcode.
+- Configurations are also uploaded as xcodeproj file format.
