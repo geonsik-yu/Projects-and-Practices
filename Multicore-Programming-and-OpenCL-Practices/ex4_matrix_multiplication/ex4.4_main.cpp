@@ -23,6 +23,9 @@
 #include <cmath>
 #include <OpenCL/cl.h>
 
+#include <mach/clock.h>
+#include <mach/mach.h>
+
 // A hard-coded error bound.
 static float ERROR_BOUND = 0.5;
 
@@ -38,6 +41,26 @@ void PrintMatrix(size_t Nrow, size_t Ncol, float* matrix);
 
 int main(int argc, char** argv){
 	
+	// 1. Load input matrices and an expected result matrix.
+	// 2D matrices flattended into 1D array.
+	size_t n; size_t p; size_t m;
+	std::ifstream fin;
+	fin.open("./problem_2.txt");
+	// Input file "problem_1.txt" contains a matrix multiplication problem with ( n = 4, p = 8, m = 2 )
+	// 	and "problem_2.txt" contains a problem with ( n = 1024, p = 2048, m = 512 )
+	if (!fin.is_open()){
+		std::cout << "input file open failure" << std::endl;
+		exit(1);
+	}
+	
+	std::string read_str;
+	std::string buf;
+	getline(fin, read_str);
+	std::stringstream ss(read_str);
+	ss >> buf; n = atoi(buf.c_str());
+	ss >> buf; p = atoi(buf.c_str());
+	ss >> buf; m = atoi(buf.c_str());
+
 	cl_context context = 0;
 	cl_command_queue commandQueue = 0;
 	cl_program program = 0;
@@ -78,26 +101,6 @@ int main(int argc, char** argv){
 	
 	
 	// 5. Kernel Memory Objects and Kernel Arguments -----------------------
-	// 2D matrices flattended into 1D array.
-	size_t n; size_t p; size_t m;
-	
-	std::ifstream fin;
-	fin.open("./problem_2.txt");
-	// Input file "problem_1.txt" contains a matrix multiplication problem with ( n = 4, p = 8, m = 2 )
-	// 	and "problem_2.txt" contains a problem with ( n = 1024, p = 2048, m = 512 )
-	if (!fin.is_open()){
-		std::cout << "input file open failure" << std::endl;
-		exit(1);
-	}
-	
-	std::string read_str;
-	std::string buf;
-	getline(fin, read_str);
-	std::stringstream ss(read_str);
-	ss >> buf; n = atoi(buf.c_str());
-	ss >> buf; p = atoi(buf.c_str());
-	ss >> buf; m = atoi(buf.c_str());
-	
 	size_t padded_n = 0;
 	cl_ulong numMaxCU = 0;
 	clGetDeviceInfo(device, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(numMaxCU), &numMaxCU, NULL);
@@ -136,8 +139,6 @@ int main(int argc, char** argv){
 			ss >> buf; b[i*m+j] = (atof(buf.c_str()));
 		}
 	}
-	//PrintMatrix(n, p, a);
-	//PrintMatrix(p, m, b);
 	
 	if (!CreateMemObjects(context, memObjects, a, b, padded_n, p, m)){
 		Cleanup(context, commandQueue, program, kernel, memObjects);
@@ -364,7 +365,6 @@ void TimeStamp(cl_event prof_event){
 	std::cout << "elapsed time (queue)     : " << elapsed_queue << std::endl;
 	std::cout << "elapsed time (submitted) : " << elapsed_submitted << std::endl;
 	std::cout << "elapsed time (execution) : " << elapsed_execution << std::endl;
-	std::cout << "elapsed time (total) : " << elapsed_queue + elapsed_submitted + elapsed_execution << std::endl;
 	std::cout << "------------------------------------------" << std::endl;
 }
 

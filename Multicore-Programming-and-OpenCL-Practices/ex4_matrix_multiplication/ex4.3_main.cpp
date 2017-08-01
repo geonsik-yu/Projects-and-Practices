@@ -187,8 +187,6 @@ int main(int argc, char** argv){
 	return 0;
 }
 
-
-
 // Function 1. OpenCL Context.
 // Create an OpenCL context on the first available platform.
 cl_context CreateContext(){
@@ -357,7 +355,6 @@ void TimeStamp(cl_event prof_event){
 	std::cout << "elapsed time (queue)     : " << elapsed_queue << std::endl;
 	std::cout << "elapsed time (submitted) : " << elapsed_submitted << std::endl;
 	std::cout << "elapsed time (execution) : " << elapsed_execution << std::endl;
-	std::cout << "elapsed time (total) : " << elapsed_queue + elapsed_submitted + elapsed_execution << std::endl;
 	std::cout << "------------------------------------------" << std::endl;
 }
 

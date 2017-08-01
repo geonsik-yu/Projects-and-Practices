@@ -76,7 +76,6 @@ int main(int argc, char** argv){
 		return 1;
 	}
 	
-	
 	// 5. Kernel Memory Objects and Kernel Arguments -----------------------
 	// 2D matrices flattended into 1D array.
 	size_t n; size_t p; size_t m;
@@ -183,7 +182,7 @@ int main(int argc, char** argv){
 		}
 	}
 	
-	PrintMatrix(n, m, result);
+	//PrintMatrix(n, m, result);
 	Validation(correct_result, result, n, m);
 	TimeStamp(prof_event);
 	std::cout << "Executed program succesfully." << std::endl;
@@ -365,7 +364,6 @@ void TimeStamp(cl_event prof_event){
 	std::cout << "elapsed time (queue)     : " << elapsed_queue << std::endl;
 	std::cout << "elapsed time (submitted) : " << elapsed_submitted << std::endl;
 	std::cout << "elapsed time (execution) : " << elapsed_execution << std::endl;
-	std::cout << "elapsed time (total) : " << elapsed_queue + elapsed_submitted + elapsed_execution << std::endl;
 	std::cout << "------------------------------------------" << std::endl;
 }
 
