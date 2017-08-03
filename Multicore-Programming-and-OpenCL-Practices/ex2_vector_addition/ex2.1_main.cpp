@@ -11,7 +11,7 @@
 #include <stdlib.h>
 
 #include <OpenCL/opencl.h>
-#include "ex2_vector_addition.cl.h"
+#include "ex2.1_vector_addition.cl.h"
 
 #define NUM_VALUES 2048 // A hard-coded number.
 

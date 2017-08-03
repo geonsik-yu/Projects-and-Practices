@@ -176,7 +176,7 @@ int main(int argc, char** argv){
 	}
 
 	// 3. Program ----------------------------------------------------------
-	program = CreateProgram(context, device, "ex3_vector_addition.cl");
+	program = CreateProgram(context, device, "ex2.2_vector_addition.cl");
 	if (program == NULL){
 		Cleanup(context, commandQueue, program, kernel, memObjects);
 		return 1;
