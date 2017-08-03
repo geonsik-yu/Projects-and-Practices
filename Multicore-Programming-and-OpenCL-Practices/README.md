@@ -39,7 +39,7 @@ This repository includes introductory study materials of OpenCL and multicore pr
 | ex6.7 | (Ax = b) Sequential Power Iteration                 | 2017/09/--   |          |
 | ex6.8 | (Ax = b) GPGPU      Power Iteration                 | 2017/09/--   |          |
 | ex7   | OpenCV introduction                                 | 2017/08/05   |          |
-| ex8   | OpenCL Gaussian Image Smoothing algorithm (+OpenCV) | 2017/08/05   |          |
+| ex8   | OpenCL Image filtering                              | 2017/08/05   |          |
 | ex9.1 | OpenCL Parallel Sum: Naive reduction                | 2017/08/05   |          |
 | ex9.2 | OpenCL Parallel Sum: Control divergence             | 2017/08/05   |          |
 | ex9.3 | OpenCL Parallel Prefix Sum: Naive                   | 2017/08/05   |          |
