@@ -1,5 +1,5 @@
 ### OpenCL Study Materials
-This repository includes introductory study materials of OpenCL and multicore programming, which are covered (or reviewed) in the offline group study sessions in Anam-dong, Seoul. Code examples we produced are mostly based on textbooks, lecture materials and academic papers mentioned below.
+This repository includes introductory study materials of OpenCL and multicore programming, which are covered (or reviewed) in the offline group study sessions in Anam-dong, Seoul. Code examples we produced/practieced are mostly based on textbooks, lecture materials and academic papers mentioned below. Some of the materials mentioned are what we discussed in our sessions but are not implemented. If anybody has spot any problems in our pratice codes or has ideas of how to further improve the GPU manipulation we would love to be noticed about it. Thank you.
 
 ### References
 [1] Munshi, Aaftab, et al. *OpenCL programming guide*. Pearson Education, 2011.<br/> 
@@ -8,8 +8,7 @@ This repository includes introductory study materials of OpenCL and multicore pr
 [4] W. Hwu Wen-Mei. "Basic Matrix-Matrix Multiplication." *Heterogeneous Parallel Programming*, Coursera. 2016. Lecture.<br/>
 [5] Anton, Howard, and Robert C. Busby. Contemporary linear algebra. Wiley, 2003.<br/>
 [6] Cheney, E., and David Kincaid. Numerical mathematics and computing. Nelson Education, 2012.<br/>
-[7]
-[8] Stevens, Cody. GPU-optimized graph theory analysis of allosteric protein signaling networks. Wake Forest University, 2015. <br/>
+[7] Stevens, Cody. GPU-optimized graph theory analysis of allosteric protein signaling networks. Wake Forest University, 2015. <br/>
 
 
 ### List of Code Examples

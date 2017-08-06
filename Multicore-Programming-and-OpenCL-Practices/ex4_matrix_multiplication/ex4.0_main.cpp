@@ -86,7 +86,6 @@ int main(int argc, const char * argv[]) {
 	//mat_mul_ikj(n, p, m, a, b, result);
 	clock_get_time(cclock, &t_end);
 
-
 	unsigned long elapsed = (t_end.tv_sec*1e9 + t_end.tv_nsec) - (t_start.tv_sec*1e9 + t_start.tv_nsec);
 	printf("Elapsed Time: (ns) %lu\n", elapsed);
 	mach_port_deallocate(mach_task_self(), cclock);
