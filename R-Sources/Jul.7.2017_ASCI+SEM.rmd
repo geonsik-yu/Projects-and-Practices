@@ -1,0 +1,94 @@
+---
+title: "ASCI and Structural Equation Model"
+author: "Yerim Chung and Geonsik Yu"
+date: '2017 7 25 '
+output: pdf_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Load libraries and the survey dataset.
+ - http://www2.gsu.edu/~mkteer/sem2.html#loading
+ - http://lavaan.ugent.be/index.html
+```{r}
+if (!require("lavaan", quietly = TRUE)){install.packages("lavaan")}
+library(lavaan);
+library(readr);
+library(psych);
+data_directory <- "~/Desktop/r_workspace/data-test5.csv"; 
+data <- suppressMessages( read_csv(data_directory, progress = FALSE)[1:198,] );
+data$a10 <- 10 - data$a10;   ## conformation = 10 - disconformation
+```
+
+## 2. Define a structural equation model and conduct fitting.
+- Some of resulting standard errors are negaive (Heywood cases).
+- In our model, we should check the variance estimate of eta-1 (-0.12).
+- http://zencaroline.blogspot.kr/2007/05/heywood-cases-negative-error-variances.html
+```{r}
+model <- '
+# measurement model
+  ksi =~ a1 + a2 + a3
+  eta1 =~ a4 + a5 + a6
+  eta2 =~ a7 + a8
+  eta3 =~ a9 + a10 + a11
+  eta4 =~ a15
+  eta5 =~ a12 + a13 + a14
+# regressions
+  eta1 ~ ksi
+  eta2 ~ ksi + eta1
+  eta3 ~ ksi + eta1 + eta2
+  eta4 ~ eta3
+  eta5 ~ eta3 + eta4
+';
+fit <- sem(model, data = data);
+```
+
+## 3. Print output.
+```{r}
+summary(fit, standardized=TRUE);
+```
+
+## 4. Detailed outputs.
+```{r}
+# Unstandardized solution matrix (factor loading, or lambda).
+inspect(fit,what="est")$lambda
+
+# Standardized solution matrix (factor loading, or lambda).
+inspect(fit,what="std")$lambda
+
+```
+
+## 5. Goodness of fit of the model.
+```{r}
+fitmeasures(fit)
+```
+
+## 6. ASCI (simplified fomula).
+```{r}
+# Load weighted of eta-3.
+numerator <- sum(inspect(fit,what="est")$lambda[9:11,4] * colMeans(data[,11:13])) - sum(inspect(fit,what="est")$lambda[9:11,4])
+denominator <- sum(inspect(fit,what="est")$lambda[9:11,4]) * 9
+
+ASCI <- (numerator / denominator) *100
+ASCI
+```
+
+## 7. Cronbach's alpha.
+```{r}
+alpha(data[,3:5], check.keys =  TRUE);
+```
+```{r}
+alpha(data[,6:8], check.keys =  TRUE);
+```
+```{r}
+#alpha(data[,9:10], check.keys =  TRUE);
+```
+```{r}
+alpha(data[,11:13], check.keys =  TRUE);
+```
+```{r}
+alpha(data[,14:16], check.keys =  TRUE);
+```
+
+

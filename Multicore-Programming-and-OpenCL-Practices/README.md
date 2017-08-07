@@ -9,6 +9,7 @@ This repository includes introductory study materials of OpenCL and multicore pr
 [5] Anton, Howard, and Robert C. Busby. Contemporary linear algebra. Wiley, 2003.<br/>
 [6] Cheney, E., and David Kincaid. Numerical mathematics and computing. Nelson Education, 2012.<br/>
 [7] Stevens, Cody. GPU-optimized graph theory analysis of allosteric protein signaling networks. Wake Forest University, 2015. <br/>
+[8] Redmon, Joseph, and Ali Farhadi. "YOLO9000: better, faster, stronger." arXiv preprint arXiv:1612.08242 (2016).
 
 
 ### List of Code Examples
@@ -38,7 +39,9 @@ This repository includes introductory study materials of OpenCL and multicore pr
 | ex6.7 | (Ax = b) Sequential Power Iteration                 | 2017/09/--   |          |
 | ex6.8 | (Ax = b) GPGPU      Power Iteration                 | 2017/09/--   |          |
 | ex7   | OpenCV introduction                                 | 2017/08/05   |          |
+| ex8   | OpenCL Image filtering: Row operation               | 2017/08/05   |          |
 | ex8   | OpenCL Image filtering                              | 2017/08/05   |          |
+
 | ex9.1 | OpenCL Parallel Sum: Naive reduction                | 2017/08/05   |          |
 | ex9.2 | OpenCL Parallel Sum: Control divergence             | 2017/08/05   |          |
 | ex9.3 | OpenCL Parallel Prefix Sum: Naive                   | 2017/08/05   |          |
