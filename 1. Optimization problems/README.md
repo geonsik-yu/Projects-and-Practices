@@ -16,34 +16,26 @@ This repository includes introductory study materials of optimization problems, 
 [4] An, Hyung-Chan, Robert Kleinberg, and David B. Shmoys. "Improving christofides' algorithm for the st path TSP." Journal of the ACM (JACM) 62.5 (2015): 34.
 
 ### List of Programming Practices
-| Index | Descriptions                                                            | Session Date |
-| -------- | -------------------------------------------------------------------- | ------
+| Index | Descriptions                                                            |
+| -------- | -------------------------------------------------------------------- |
 | pp1.1    | Max Flow Problem (Cplex)                                             |
 | pp1.2    | Min Cut Problem (Cplex)                                              |
 | pp1.3    | Ford-Fulkerson Algorithm                                             |
 | pp1.4    | Push-Label Algorithm                                                 |
 | pp1.5    | Minimum Cost Flow Problem                                            |
 | pp1.6    | Successive Shortest Path Algorithm                                   |
-| pp2.1    | Prim                                                                 |
 | pp2.2    | Kruskal                                                              |
 | pp2.3    | Karger, Klein, and Tarjan                                            |
-
-| pp2.4    | Cutting Stock Problem and Cutting Plane Method (Cplex)                                 |
+| pp2.4    | Cutting Stock Problem and Cutting Plane Method (Cplex)               |
 | pp2.5    | MST and Cutting Plane Method (Cplex)                                 |
-| pp2.6    | ???? and Danzig-Wolfe Decomposition (Cplex)                                 |
-| pp2.5    | Spanning Tree Polytope and Delayed Column Generation Method (Cplex)  |
-
-
-| pp2.6    | Bipartite Matching and Matroid Intersection                          |
-| pp2.6    | Orientation Problem and Matroid Intersection                                |
-| pp2.6    | Bipartite Matching and Matroid Intersection                                |
-| pp2.6    | Colorful Spanning Tree and Matroid Intersection                                |
-| pp2.6    | Arborescence and Matroid Intersection                                |
-| pp2.7    | Conditional MST and Weighted Matroid Intersection                    |
-| pp2.Note | Note                                                                 |
-
-| pp3.1    | TSP: Christofides' Algorithm                                            |
-| pp3.2    | TSP: An's Algorithm                                                     |
+| pp2.6    | Spanning Tree Polytope and Delayed Column Generation Method (Cplex)  |
+| pp2.7    | LPBoosting (Cplex)                                                   |
+| pp3.1    | Bipartite Matching (Matroid Intersection)                            |
+| pp3.2    | Orientation Problem (Matroid Intersection)                           |
+| pp3.3    | Colorful Spanning Tree (Matroid Intersection)                        |
+| pp3.4    | Arborescence (Matroid Intersection)                                  |
+| pp3.5    | MST with additional constraints (Matroid Intersection)               |
 | pp3.Note | Note                                                                 |
-
-| pp4.1    | Markowitz Portfolio                                     |
+| pp4.1    | TSP: Christofides' Algorithm                                         |
+| pp4.2    | TSP: An's Algorithm                                                  |
+| pp5.1    | Markowitz Portfolio                                                  |
