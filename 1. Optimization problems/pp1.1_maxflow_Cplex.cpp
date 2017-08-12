@@ -27,8 +27,7 @@ IloModel read_lp(int& n, int& m, IloEnv env){
 	ofstream fout;
 	fin.open("./input/pp1.1_input.txt");
 	fout.open("./pp1.1_output.txt");
-	if (fin.is_open())
-		cout << "input file opened properly\n";
+	if (fin.is_open()){ cout << "input file opened properly\n"; }
 	else { cout << "file open failure\n"; exit(1); }
 	
 	string read_str;

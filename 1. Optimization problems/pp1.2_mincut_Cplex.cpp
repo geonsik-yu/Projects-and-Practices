@@ -101,7 +101,7 @@ void findMaxFlow(string inputDirectory){
 	ifstream fin;
 	ofstream fout;
 	fin.open(inputDirectory);
-	fout.open("./ex1_output.txt");
+	fout.open("result_"+inputDirectory);
 	if (!fin.is_open()){ cout << "file open failure\n"; exit(1); }
 	
 	string read_str;
