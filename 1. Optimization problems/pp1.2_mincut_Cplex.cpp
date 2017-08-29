@@ -7,11 +7,10 @@
 		and then find correcponding minimum cut from the solution's resulting residual graph.
  		>> Given a graph G=(V,E) and flow f_e for each edge e, corresponding residual graph G'=(V,E') is as follows:
 			- for every edge e in E with capacity c_e
-			(1) A forward edge e' is in E' with capacity (c_e - f_e) if (c_e - f_e) is not zero.
-			(2) A backward(opposite direction) edge e'' is in E' with capacity f_e if f_e is not zero.
+				(1) A forward edge e' is in E' with capacity (c_e - f_e) if (c_e - f_e) is not zero.
+				(2) A backward(opposite direction) edge e'' is in E' with capacity f_e if f_e is not zero.
 		>> Given a residual graph G'=(V,E'), 
- 			- minimum cut C*:= {<u,v>|<u,v> in E', where u is reachable from the source node
-																		and v in not reachable from the source}
+ 			- minimum cut C*:= {<u,v>|<u,v> in E', where u is reachable from the source node and v in not reachable from the source}
 
 	- The 1st line of the input contains the number of vertices n (n <= 1,000) and the number of arcs m, separated by a space.
  	- Each vertex is numbered from 0 to n-1.
