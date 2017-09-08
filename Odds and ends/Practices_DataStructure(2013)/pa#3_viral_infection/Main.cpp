@@ -7,23 +7,7 @@
 		1. A social network is given and 
 		2. Any nodes adjacent to a infected node at time (t) will be infected at time (t+1)
 		3. Any infected node will not be affected by other nodes anymore.
-		4. Any infected node will be recovered to normal after (r) units of time
- 2.
- 
-		2. Starting point and exit are always (0,0,0) and (n-1, n-1, n-1), respectively.
-		3. If the element's value is 1 then the location (block) is not accessible, and if it is 0 then the location (block) can be included as a part of valid path.
-		4. There is no diagonal movement in this problem. That is, our path finder can only move to a block which shares an edge with the current block.
-		5. For educational purpose, c++ data structures (e.g. stack) are not allowed.
-		6. One of the shortest paths should be returned for each case.
-
-		1.
- 주어진 social network을 나타내는 graph에서, 초기에 (at t0 ) ‘virus’에
- 발생하였을 때 일정 시간 후에 총 감염 노드 수를 출력하는 프로그램을 작성하시오. Infection process는 다음과 같다.
- 1. 감염되지 않은 노드는 이웃하는 감염된 노드로부터 1 time unit 후에 virus 에 감염된다.
- 2. 감염된 노드는 다른 감염된 노드에 의해 영향을 받지 않는다.
- 3. 어떤노드이든지감염된지rtimeunit후에는정상이된다.단,정상이된시점에
- 감염된 이웃 노드가 있더라도 그 즉시 감염되지 않으나, 다음 time unit 에 감염된 이웃 노드가 있다면 재 감염된다.
- 
+		4. Any infected node will be recovered to normal after (r) units of time. Right at the time of recovery, the recovered node will not be infected again immediately. It can be susceptible to infection from the next turn. 
 	- Input:
  1. 20 sets of test cases are given.
  2. First number of each case is the dimension (n) and (n^2 + 1) rows of numbers are following for the case.

@@ -69,7 +69,7 @@
 	var g = svg.append("g");
 	svg.style("cursor","move");
 
-	d3.json("https://raw.githubusercontent.com/geonsik-yu/Optimization_Exercises/master/data_typeA15.json", function(error, dataSet) {
+	d3.json("https://raw.githubusercontent.com/geonsik-yu/Projects-and-Practices/master/3.%20D3.js%20materials/Yonsei-Network/Data_SyllabiNet/data_typeA15.json", function(error, dataSet) {
 		graph = parse_data(dataSet)
 		var linkedByIndex = {};
 		graph.links.forEach( function(edge){ linkedByIndex[edge.source + "," + edge.target] = true;} );
