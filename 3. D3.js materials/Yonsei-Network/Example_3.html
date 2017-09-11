@@ -114,11 +114,11 @@
 						 .attr("d", d3.svg.symbol()
 									  .size(function(d) { return Math.PI*Math.pow(size(d.size)||nominal_base_node_size,2); })
 									  .type(function(d) { return d.type; }))
-						 			  .style(tocolor, function(d) { 
-									 	if (isNumber(d.score) && d.score>=0) return color(d.score); 
-										else return default_node_color; })
-									  .style("stroke-width", nominal_stroke)
-									  .style(towhite, "white");
+						 .style(tocolor, function(d) { 
+									if (isNumber(d.score) && d.score>=0) return color(d.score); 
+									else return default_node_color; })
+						 .style("stroke-width", nominal_stroke)
+						 .style(towhite, "white");
   		var text = g.selectAll(".text")
 					.data(graph.nodes)
 					.enter().append("text")

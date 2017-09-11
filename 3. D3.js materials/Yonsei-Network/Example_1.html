@@ -99,8 +99,7 @@
 				var dcx = (window.innerWidth/2-d.x*zoom.scale());
 				var dcy = (window.innerHeight/2-d.y*zoom.scale());
 				zoom.translate([dcx,dcy]);
-				g.attr("transform", "translate("+ dcx + "," + dcy  + ")scale(" + zoom.scale() + ")"); 
-			});
+				g.attr("transform", "translate("+ dcx + "," + dcy  + ")scale(" + zoom.scale() + ")"); });
 		
 		var tocolor = "fill";
 		var towhite = "stroke";
@@ -113,15 +112,15 @@
 						 .attr("d", d3.svg.symbol()
 									  .size(function(d) { return Math.PI*Math.pow(size(d.size)||nominal_base_node_size,2); })
 									  .type(function(d) { return d.type; }))
-						 			  .style(tocolor, function(d) { 
-									 	if (isNumber(d.score) && d.score>=0) return color(d.score); 
-									 	else if (d.id.includes("BIZ")) return "#f28900";
-									 	else if (d.id.includes("IIE")) return "#e3d900";
-									 	else if (d.id.includes("ECO")) return "#fccbde";
-									 	else if (d.id.includes("MAT")) return "#8af773";
-									 	else return default_node_color; })
-									  .style("stroke-width", nominal_stroke)
-									  .style(towhite, "white");
+						 .style(tocolor, function(d) { 
+								if (isNumber(d.score) && d.score>=0) return color(d.score); 
+								else if (d.id.includes("BIZ")) return "#f28900";
+								else if (d.id.includes("IIE")) return "#e3d900";
+								else if (d.id.includes("ECO")) return "#fccbde";
+								else if (d.id.includes("MAT")) return "#8af773";
+								else return default_node_color; })
+						 .style("stroke-width", nominal_stroke)
+						 .style(towhite, "white");
   		var text = g.selectAll(".text")
 					.data(graph.nodes)
 					.enter().append("text")
@@ -137,8 +136,7 @@
 			.on("mousedown", function(d) { d3.event.stopPropagation();
 					focus_node = d;
 					set_focus(d)
-					if (highlight_node === null) set_highlight(d)
-				})
+					if (highlight_node === null) set_highlight(d) })
 			.on("mouseout", function(d) { exit_highlight();} );
 		d3.select(window).on("mouseup", function() {
 			if (focus_node!==null){
