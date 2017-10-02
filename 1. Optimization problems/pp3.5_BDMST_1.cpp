@@ -1,6 +1,20 @@
-//
-//  matroidIntersection.cpp
-//
+/*
+ Title: Application of weighted matroid intersection algorithm.
+ Description: This c++ source code determines minimum spanning tree with constraints of degree bounds on some nodes.
+ Note:
+ 	- Developed with IBM ILOG CPLEX/Concert in OS X.
+ 	- This program reads the input from "input.txt" in the current working directory.
+
+
+ 	- The 1st line of the input contains the number of vertices n (n <= 1,000) and the number of arcs m, separated by a space.
+ 	- Each vertex is numbered from 0 to n-1.
+ 	- Each of the following m lines of the input contains (the numeric IDs of) the tail and head of the arc and its capacity, separated by spaces.
+ 	- Vertex 0 is the flow source; Vertex n-1 is the sink.
+ 	- Assume that influx into the source node and outflux from the sink node are not allowed as an input.
+ 	- The console output shows the value of a maximum flow using "%.2f\n" for formatting.
+ 	- Wrong input not handled.
+ 	- Meaningless constraints(e.g. nodes without influxes or outfluxes) not manually detected or removed.
+*/
 
 #include <iostream>
 #include <fstream>
@@ -167,7 +181,6 @@ void read_file(string filepath){
 		}
 	}
 	
-	//printEntireGraph(givenGraph, n);
 	getline(fin, read_str);
 	ss.str(read_str);
 	ss >> buffer; l = atoi(buffer.c_str());
@@ -223,7 +236,6 @@ void addArcIndependenceGraphicMatroid(){
 					exchangeGraph[m].head = new AdjListNode(index_x, - cost_x, 0, temp);
 					exchangeGraph[m].head->intersection = true;
 					m1 = max(m1, cost_x);
-					//cout << index_x<<"hereehere!!" << endl;
 				}
 			}
 			pCrawl = pCrawl->next;
@@ -390,6 +402,7 @@ int printIntersectionGraph(struct AdjList* list, int size){
 	cout << "-------------------------------------------" << endl;
 	return sum/2;
 }
+
 void printEntireGraph(struct AdjList* list, int size){
 	cout << "-------------------------------------------" << endl;
 	for (int v = 0; v < size; v++){
